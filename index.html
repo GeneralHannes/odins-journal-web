@@ -1535,6 +1535,12 @@ html.embedded .keep-brand, html.embedded .keep-switch { display:none !important;
   .jr-ae #ae-cat { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a8fa8' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 12.5V4.5h8l9 9-8 8z'/%3E%3Ccircle cx='8' cy='9' r='1.2'/%3E%3C/svg%3E"); }
   .jr-ae #ae-notes, .jr-ae #ad-notes { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a8fa8' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 6h14M5 11h14M5 16h9'/%3E%3C/svg%3E"); }
   .jr-ae .field > span:first-child { font-size:.74rem; font-weight:600; letter-spacing:.02em; color:color-mix(in srgb,var(--accent) 55%,var(--muted)); }
+  /* every label the same one line: the "(optional)" / "(time)" hint is the label's own size (it used to be bigger, which pushed
+     "To (optional)" above "Date" and "From (time)" above "To" in the two-column rows) */
+  .jr-ae .field > span:first-child { line-height:1.25; min-height:1.25em; white-space:nowrap; }
+  .jr-ae .field > span:first-child:not(:has(.jr-ae-map)) { display:block; overflow:hidden; text-overflow:ellipsis; }
+  .jr-ae .field > span:first-child:has(.jr-ae-map) { display:flex; align-items:center; gap:.3rem; }
+  .jr-ae .field > span:first-child .muted { font-size:inherit; font-weight:500; line-height:inherit; letter-spacing:inherit; }
   .jr-ae input:focus { border-color:color-mix(in srgb,var(--accent) 70%,transparent); box-shadow:var(--glass-edge),0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent); }
   .jr-ae button.act { background:var(--accent); box-shadow:inset 0 1px 0 rgb(255 255 255 / .35), 0 10px 20px -10px var(--accent); transition:background-color .35s, box-shadow .35s, transform .2s var(--k-bouncy); }
   .jr-ae button.act:active { transform:scale(.96); }
@@ -1624,6 +1630,8 @@ html.embedded .keep-brand, html.embedded .keep-switch { display:none !important;
   /* very small phones: just the $ badge (the numbers are one tap away in the sheet), so the month name and the date keep their room */
   @media (max-width:359px) { .jr-money-month b { display:none; } .jr-money-btn { padding:0 .35rem; } }
   @media (max-width:339px) { .jr-day-headrow .jr-money-btn b { display:none; } }
+  /* a phone's day header is full with the date, the weekday and the money button: the "n events" count gives way (the events are listed right below) */
+  @media (max-width:440px) { .jr-day-headrow:has(.jr-money-btn) .jr-day-sum { display:none; } }
   .jr-money .jr-mn-head { display:flex; align-items:center; justify-content:space-between; gap:.6rem; }
   .jr-money .jr-mn-head h2 { margin:0; flex:1; text-align:center; }
   .jr-mn-nav { all:unset; box-sizing:border-box; cursor:pointer; width:2.4rem; height:2.4rem; display:grid; place-items:center; border-radius:50%; font-size:1.5rem; line-height:1; color:var(--muted); }
@@ -1654,6 +1662,29 @@ html.embedded .keep-brand, html.embedded .keep-switch { display:none !important;
   .jr-mn-del:hover, .jr-mn-del:focus-visible { color:var(--k-bad); background:color-mix(in srgb,var(--k-bad) 12%,transparent); outline:none; }
   .jr-mn-cur { display:flex; align-items:center; justify-content:space-between; gap:.6rem; margin-top:.7rem; padding-top:.6rem; border-top:1px solid var(--glass-line); font-size:.78rem; color:var(--muted); }
   .jr-mn-cur .jr-chipbtn { padding:.22rem .65rem; font-size:.8rem; }
+
+  /* money bars in the calendar squares: +gained (green) and −spent (red), under the day's events */
+  .jr-mbar { flex:none; margin-top:auto; display:flex; gap:2px; min-width:0; max-width:100%; font:700 .6rem/1.2 var(--k-font,inherit); font-variant-numeric:tabular-nums; }
+  .jr-mbar i { font-style:normal; flex:1 1 0; min-width:0; text-align:center; padding:1px 2px; border-radius:6px; overflow:hidden; text-overflow:clip; white-space:nowrap;
+    box-shadow:inset 0 0 0 1px color-mix(in srgb,currentColor 28%,transparent); }
+  .jr-mbar i.in { color:var(--good); background:color-mix(in srgb,var(--good) 16%,transparent); }
+  .jr-mbar i.out { color:var(--k-bad); background:color-mix(in srgb,var(--k-bad) 14%,transparent); }
+  :root:is([data-theme="latte"],[data-theme="daylight"]) .jr-mbar i.in { color:#14682f; background:color-mix(in srgb,#1c9a4b 17%,transparent); }
+  :root:is([data-theme="latte"],[data-theme="daylight"]) .jr-mbar i.out { color:#a8182e; background:color-mix(in srgb,#d3243f 13%,transparent); }
+  .jr-mbar i.net { display:none; }
+  /* a narrow square: one bar with the day's net instead of two */
+  @container (max-width:3.9rem) { .jr-mbar i.net { display:block; } .jr-mbar i:not(.net) { display:none; } .jr-mbar { font-size:.56rem; } }
+  .jr-cal-day.other-month .jr-mbar { opacity:.6; }
+
+  /* money in the add / edit event form */
+  .jr-ae-money { margin:.1rem 0 .5rem; }
+  .jr-ae-money-h { padding-left:.1rem; display:flex; align-items:baseline; justify-content:space-between; gap:.5rem; font-size:.74rem; font-weight:600; letter-spacing:.02em; margin-bottom:.2rem;
+    color:color-mix(in srgb,var(--accent) 55%,var(--muted)); }
+  .jr-ae-money-h .muted { font-size:inherit; font-weight:500; }
+  .jr-ae-money-h small { font-size:.72rem; font-weight:500; color:var(--muted); text-align:right; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .jr-ae-money .field { margin-bottom:0; }
+  .jr-ae-money input { font-variant-numeric:tabular-nums; }
+  #ae-m-in:not(:placeholder-shown) { color:var(--good); } #ae-m-out:not(:placeholder-shown) { color:var(--k-bad); }
 
   /* ================= security ================= */
   .jr-pwrules { font-size:.78rem !important; line-height:1.4; }
@@ -3536,6 +3567,12 @@ async function openAddEvent(prefillDate, id, focus, day){
       <label class="field">${jrLbl('lblNotes')}<input id="ad-notes" autocomplete="off"></label>
       <button type="button" class="mini" id="ad-reset">${esc(tx('resetDay'))}</button>
     </div>
+    ${jrMoneyOn()&&jrCanEdit()?`<div class="jr-ae-money" id="ae-money">
+      <div class="jr-ae-money-h"><span>${esc(tx('money'))} <span class="muted">${esc(tx('optional'))}</span></span><small id="ae-money-day"></small></div>
+      <div class="jr-ae-row">
+        <label class="field"><span>${esc(tx('moneyIn'))}</span><input id="ae-m-in" inputmode="decimal" autocomplete="off" placeholder="0.00"></label>
+        <label class="field"><span>${esc(tx('moneyOut'))}</span><input id="ae-m-out" inputmode="decimal" autocomplete="off" placeholder="0.00"></label>
+      </div></div>`:''}
       ${JR_PEOPLE.length?`<div class="field jr-pick" id="ae-people">
         <span id="ae-people-lbl"></span>
         <button type="button" class="jr-pick-btn" id="ae-people-btn" aria-expanded="false"><span class="jr-pick-sel" id="ae-people-sel"></span></button>
@@ -3553,6 +3590,15 @@ async function openAddEvent(prefillDate, id, focus, day){
   ov.onclick=e=>{ if(e.target===ov) dismiss(ov); };
   const q=s=>card.querySelector(s);
   const lbl=iso=>{ const d=new Date(iso+'T00:00:00'); return jrDayAbbr(d.getDay())+' '+d.getDate(); };
+  // money typed here goes on the day of the open tab, or on the event's first day
+  const moneyDay=()=>cur!=='all'?cur:(q('#ae-date')?.value||'');
+  function moneyHint(){
+    const el=q('#ae-money-day'); if(!el) return;
+    const day=moneyDay(); if(!/^\d{4}-\d{2}-\d{2}$/.test(day)){ el.textContent=''; return; }
+    const d=jrMoneyDay(day);
+    el.textContent=jrFmtShort(new Date(day+'T00:00:00'))+(d&&d.n?' · '+[d.in>0?jrMoneyFmt(d.in,true):'',d.out>0?jrMoneyFmt(-d.out,true):''].filter(Boolean).join(' '):'');
+    if(!d) jrMoneyLoad(jrYM(day)).then(()=>{ if(q('#ae-money-day') && moneyDay()===day) moneyHint(); });
+  }
   const longLbl=iso=>jrFmtLong(new Date(iso+'T00:00:00'));
   // the days of the event as the dates stand now (a span of one day or under has no day tabs)
   const spanList=()=>{ const a=q('#ae-date').value, b=q('#ae-end-date').value;
@@ -3652,9 +3698,10 @@ async function openAddEvent(prefillDate, id, focus, day){
     if(!loc){ toast(tx('typePlace')); return; } open(jrMapUrl(loc),'_blank','noopener'); });
   // the end date can't be before the start: its picker starts there, and a start moved past it takes it along
   const syncEnd=()=>{ const a=q('#ae-date').value, b=q('#ae-end-date'); b.min=a; if(b.value && a && b.value<a) b.value=''; };
-  q('#ae-date').addEventListener('change', ()=>{ stash(); syncEnd(); drawTabs(); });
-  q('#ae-end-date').addEventListener('change', ()=>{ stash(); drawTabs(); });
-  syncEnd(); if(cur!=='all' && !spanList().includes(cur)) cur='all'; showPanel(); drawTabs();
+  q('#ae-date').addEventListener('change', ()=>{ stash(); syncEnd(); drawTabs(); moneyHint(); });
+  q('#ae-end-date').addEventListener('change', ()=>{ stash(); drawTabs(); moneyHint(); });
+  syncEnd(); if(cur!=='all' && !spanList().includes(cur)) cur='all'; showPanel(); drawTabs(); moneyHint();
+  q('#ae-tabs')?.addEventListener('click', ()=>setTimeout(moneyHint,0));
   q('#ae-cancel').onclick=()=>dismiss(ov);
   if(ev) q('#ae-del').onclick=()=>{ dismiss(ov); deleteEventRow(ev.id); };   // asks to confirm first
   // Enter in any field saves, like pressing the button
@@ -3666,6 +3713,8 @@ async function openAddEvent(prefillDate, id, focus, day){
     const event_time=q('#ae-time').value||null, end_time=q('#ae-end-time').value||null;
     if(!title){ toast(tx('titleReq')); return; }
     if(!event_date){ toast(tx('dateReq')); return; }
+    const mIn=jrParseMoney(q('#ae-m-in')?.value), mOut=jrParseMoney(q('#ae-m-out')?.value);
+    if(Number.isNaN(mIn)||Number.isNaN(mOut)){ toast(tx('moneyBadAmt')); q(Number.isNaN(mIn)?'#ae-m-in':'#ae-m-out').focus(); return; }
     if(end_date && end_date<event_date){ toast(tx('endBeforeStart')); return; }
     if(end_date===event_date) end_date=null;
     if(end_time && !event_time){ toast(tx('needStart')); return; }
@@ -3679,7 +3728,17 @@ async function openAddEvent(prefillDate, id, focus, day){
     try{
       const saved=await api('/api/journal/events'+(ev?'/'+ev.id:''),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
       const i=JOURNAL_EVENTS.findIndex(x=>x.id===saved.id); if(i>=0) JOURNAL_EVENTS[i]=saved; else JOURNAL_EVENTS.push(saved);
-      dismiss(ov); toast(ev?tx('saved'):tx('added'));
+      // the money typed in the form: one entry each, on the day of the open tab (or the first day), named after the event
+      let moneyErr='';
+      if(mIn>0||mOut>0){
+        const day=cur!=='all'?cur:event_date;
+        for(const [kind,amount] of [['in',mIn],['out',mOut]]) if(amount>0){
+          try{ await api('/api/money',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({kind,amount,entry_date:day,note:title})}); }
+          catch(e2){ moneyErr=e2.message||'error'; }
+        }
+        delete JR_MONEY[jrYM(day)]; jrMoneyLoadVisible();
+      }
+      dismiss(ov); toast(moneyErr?tx('errPrefix')+jrErr(moneyErr):(ev?tx('saved'):tx('added')));
       if(JR_VIEW==='calendar'){ calSelect(cur!=='all'?cur:saved.event_date); if(!K_REDUCED.matches) document.querySelector(`.jr-dcard[data-id="${saved.id}"]`)?.classList.add('flash'); }
       else renderAgenda();
     }catch(e){ toast(tx('errPrefix')+jrErr(e.message)); }
@@ -3726,6 +3785,7 @@ function calDayClick(iso, ev=window.event){
       [...document.querySelectorAll('#jr-cal-grid .jr-cal-day')].find(d=>{ const b=d.getBoundingClientRect(); return ev.clientX>=b.left&&ev.clientX<b.right&&ev.clientY>=b.top&&ev.clientY<b.bottom; });
     const day=under?.dataset.iso || iso;
     calSelect(day); requestAnimationFrame(()=>jrEventPop(+chip.dataset.id, day)); return; }
+  if(ev?.target?.closest?.('#jr-cal-grid .jr-mbar') && typeof jrMoneyOn==='function' && jrMoneyOn()){ calSelect(iso); requestAnimationFrame(()=>jrMoney(iso)); return; }
   const now=Date.now(), again=JR_LAST_DAYCLICK.iso===iso && now-JR_LAST_DAYCLICK.at<400;
   JR_LAST_DAYCLICK=again?{iso:'',at:0}:{iso, at:now};
   if(again){ openAddEvent(iso); return; }
@@ -3897,7 +3957,7 @@ function renderCalendar(opt={}){
       <span class="jr-dhead"><span class="jr-daynum">${d.getDate()}</span>${n?`<span class="jr-more" hidden></span><span class="jr-count">${n}</span>`:''}</span>
       ${bars.length||singles.length?`<span class="jr-preview">${
         bars.map(({e,span,l,r})=>`<span class="jr-ev span${l?' cont-l':''}${r?' cont-r':''}${e.done?' done':''}${jrStClass(e)}" style="${jrTint(e)}" data-id="${e.id}" data-span="${span}" data-t="${esc(e.title)}" aria-label="${esc(e.title)}" title="${esc(e.title)}">${l?'↳ '+esc(jrAbbr(e.title)):esc(e.title)}</span>`).join('')
-      }${singles.map(e=>`<span class="jr-ev${e.done?' done':''}${jrStClass(e)}" style="${jrTint(e)}" data-id="${e.id}" data-t="${esc(e.title)}">${e.event_time?`<b class="jr-ev-t">${jrShortTime(e.event_time)}</b>`:''}${esc(e.title)}</span>`).join('')}</span>`:''}
+      }${singles.map(e=>`<span class="jr-ev${e.done?' done':''}${jrStClass(e)}" style="${jrTint(e)}" data-id="${e.id}" data-t="${esc(e.title)}">${e.event_time?`<b class="jr-ev-t">${jrShortTime(e.event_time)}</b>`:''}${esc(e.title)}</span>`).join('')}</span>`:''}${jrMoneyBarHtml(iso)}
     </button>`;
   }
   const grid=$('#jr-cal-grid');
@@ -4292,6 +4352,40 @@ function jrMoneyFmt(n, sign){
   return (v<0?'−':(sign&&v>0?'+':''))+JR_CUR+a.toLocaleString('en-US',{minimumFractionDigits:frac,maximumFractionDigits:frac});
 }
 const jrMoneyOn=()=>JR_MONEY_OK && !!JR_USER;
+// "42.75", "1,250.50" -> number; "" -> 0; anything else (0, negative, words) -> NaN
+const jrParseMoney=v=>{ const t=String(v||'').replace(/[,\s]/g,''); if(!t) return 0; const n=Math.round(parseFloat(t)*100)/100; return isFinite(n)&&n>0?n:NaN; };
+// short form for the small calendar bars: $42.75, $300, $1.3k, $12k, $2.4M
+function jrMoneyShort(n, sign, tight){
+  const a=Math.abs(+n||0); let t;
+  if(a>=1e6) t=(a/1e6).toFixed(a>=1e7?0:1).replace(/\.0$/,'')+'M';
+  else if(a>=1e4) t=Math.round(a/1e3)+'k';
+  else if(a>=1e3) t=(a/1e3).toFixed(1).replace(/\.0$/,'')+'k';
+  else if(tight && a>=10) t=String(Math.round(a));          // tight (a narrow square): whole units; the sheet has the exact amount
+  else t=Number.isInteger(a)?String(a):a.toFixed(2);
+  return sign+JR_CUR+t;
+}
+// the bar under a day's events: +gained (green) and −spent (red); in a narrow square just the day's net
+function jrMoneyBarHtml(iso){
+  if(!jrMoneyOn()) return '';
+  const d=jrMoneyDay(iso); if(!d||!d.n) return '';
+  const pill=(c,t)=>`<i class="${c}">${esc(t)}</i>`;
+  const net=Math.round((d.in-d.out)*100)/100;
+  const label=[d.in>0?tx('moneyIn')+' '+jrMoneyFmt(d.in):'', d.out>0?tx('moneyOut')+' '+jrMoneyFmt(d.out):''].filter(Boolean).join(', ');
+  return `<span class="jr-mbar" data-sig="${d.in}|${d.out}|${JR_CUR}" role="img" aria-label="${esc(label)}">`
+    +(d.in>0?pill('in',jrMoneyShort(d.in,'+')):'')+(d.out>0?pill('out',jrMoneyShort(d.out,'−')):'')
+    +pill('net '+(net<0?'out':'in'), jrMoneyShort(net,net<0?'−':'+',true))+`</span>`;
+}
+// puts the bars into the squares that are already drawn; re-fits the titles only if something changed
+function jrMoneyCells(){
+  const cells=document.querySelectorAll('#jr-cal-grid .jr-cal-day[data-iso]'); if(!cells.length) return;
+  let changed=false;
+  cells.forEach(c=>{
+    const now=document.createElement('div'); now.innerHTML=jrMoneyBarHtml(c.dataset.iso); const nb=now.firstElementChild, old=c.querySelector('.jr-mbar');
+    if((old?.dataset.sig||'')===(nb?.dataset.sig||'')) return;
+    changed=true; old?.remove(); if(nb) c.appendChild(nb);
+  });
+  if(changed){ jrFitCells(); jrSpanCells(); }
+}
 async function jrMoneyLoad(ym, force){
   if(!jrMoneyOn()) return null;
   const c=JR_MONEY[ym]; if(c && !force && Date.now()-c.at<30000) return c;
@@ -4302,6 +4396,7 @@ async function jrMoneyLoad(ym, force){
 function jrMoneyLoadVisible(){
   if(!jrMoneyOn()){ jrMoneyPaint(); return; }
   const yms=new Set([`${JR_CAL_YEAR}-${String(JR_CAL_MONTH+1).padStart(2,'0')}`]); if(JR_SEL) yms.add(jrYM(JR_SEL));
+  document.querySelectorAll('#jr-cal-grid .jr-cal-day[data-iso]').forEach(c=>yms.add(jrYM(c.dataset.iso)));   // the squares of the month before and after too
   Promise.all([...yms].map(ym=>jrMoneyLoad(ym))).then(jrMoneyPaint);
 }
 function jrMoneyDay(iso){
@@ -4313,15 +4408,16 @@ function jrMoneyDayBtn(iso){
   if(!jrMoneyOn()) return '';
   const d=jrMoneyDay(iso), net=d&&d.n?d.net:null, t=tx('money');
   return `<button type="button" class="jr-money-btn" id="jr-money-dbtn" onclick="jrMoney('${iso}')" title="${esc(t)}" aria-label="${esc(t)}">`
-    +`<span class="jr-money-sym">${esc(JR_CUR||'¤')}</span>${net===null?'':`<b class="${net<0?'out':'in'}">${esc(jrMoneyFmt(net,true))}</b>`}</button>`;
+    +`<span class="jr-money-sym">${esc(JR_CUR||'¤')}</span>${net===null?'':`<b class="${net<0?'out':'in'}">${esc(jrMoneyShort(net,net<0?'−':'+'))}</b>`}</button>`;
 }
 // repaints just the two buttons (the day panel itself isn't redrawn: it would replay its entrance)
 function jrMoneyPaint(){
   const mb=document.getElementById('jr-money-mbtn'); if(!mb) return;
-  if(!jrMoneyOn()){ mb.hidden=true; document.getElementById('jr-money-dbtn')?.remove(); return; }
+  if(!jrMoneyOn()){ mb.hidden=true; document.getElementById('jr-money-dbtn')?.remove(); document.querySelectorAll('.jr-mbar').forEach(b=>b.remove()); return; }
+  jrMoneyCells();
   const ym=`${JR_CAL_YEAR}-${String(JR_CAL_MONTH+1).padStart(2,'0')}`, m=JR_MONEY[ym], t=tx('money');
   mb.hidden=false; mb.title=t; mb.setAttribute('aria-label',t);
-  mb.innerHTML=`<span class="jr-money-sym">${esc(JR_CUR||'¤')}</span>${m&&m.entries.length?`<b class="${m.net<0?'out':'in'}">${esc(jrMoneyFmt(m.net,true))}</b>`:''}`;
+  mb.innerHTML=`<span class="jr-money-sym">${esc(JR_CUR||'¤')}</span>${m&&m.entries.length?`<b class="${m.net<0?'out':'in'}">${esc(jrMoneyShort(m.net,m.net<0?'−':'+'))}</b>`:''}`;
   const old=document.getElementById('jr-money-dbtn'), now=document.createElement('div'); now.innerHTML=jrMoneyDayBtn(JR_SEL||jrToday());
   if(now.firstElementChild){ if(old) old.replaceWith(now.firstElementChild); else document.querySelector('#jr-day .jr-swap')?.before(now.firstElementChild); }
 }
