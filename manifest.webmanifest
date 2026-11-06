@@ -1,11 +1,11 @@
 {
-  "name": "Yai Calendar",
-  "short_name": "Yai Calendar",
+  "name": "Odin’s Journal",
+  "short_name": "Odin’s Journal",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#213467",
-  "theme_color": "#e6e9ef",
+  "theme_color": "#ebe7d6",
   "icons": [
     {
       "src": "static/icon-192.png?v=3",

@@ -13,7 +13,7 @@ if(/iPhone|iPod/.test(navigator.userAgent))document.documentElement.classList.ad
 if(/Android/.test(navigator.userAgent)){document.documentElement.classList.add("android");if(+((navigator.userAgent.match(/Chrome\/(\d+)/)||[])[1]||0)>=115)document.documentElement.classList.add("android-blur")}</script>
 <script>/* light (Catppuccin Latte) unless this device chose another theme (Daylight is also defined: data-theme="daylight") */
 try{var t=localStorage.getItem("sk_theme");document.documentElement.setAttribute("data-theme",t||"latte");var g=localStorage.getItem("yai_glass");if(g==="soft"||g==="solid")document.documentElement.classList.add("gl-"+g)}catch(e){document.documentElement.setAttribute("data-theme","latte")}</script>
-<meta name="theme-color" content="#e6e9ef">
+<meta name="theme-color" content="#ebe7d6">
 <script src="/static/local-api.js"></script>
 <script src="/static/supabase-api.js"></script>
 <link rel="manifest" href="/manifest.webmanifest">
@@ -21,10 +21,10 @@ try{var t=localStorage.getItem("sk_theme");document.documentElement.setAttribute
 <link rel="apple-touch-icon" href="/static/apple-touch-icon.png?v=3">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Yai Calendar">
-<title>Yai Calendar</title>
+<meta name="apple-mobile-web-app-title" content="Odin’s Journal">
+<title>Odin’s Journal</title>
 <!--
-  Yai Calendar (was Odin's Journal) — future planned events (deliveries, bills, staff schedule,
+  Odin’s Journal (was Odin's Journal) — future planned events (deliveries, bills, staff schedule,
   promotions). Its own app in its own space on purpose: separate from Odin's
   Vault's admin/inventory workflow, so it can be opened, bookmarked and used
   on its own without any of Vault's tab-switching machinery. Reads/writes
@@ -568,11 +568,11 @@ html.embedded .keep-brand, html.embedded .keep-switch { display:none !important;
   /* Catppuccin Latte (catppuccin.com/palette): crust/mantle/base for the layers, surface0/1 for fills, text/subtext,
      and its blue, green, yellow, peach, red, mauve, teal and sky for the meanings above */
   :root[data-theme="latte"] { color-scheme:light;
-    --k-bg0:#dce0e8; --k-bg1:#e6e9ef; --k-bg2:#eff1f5; --k-bg3:#ccd0da; --k-bg4:#bcc0cc;
-    --k-ink:#4c4f69; --k-hi:#4c4f69; --k-muted:#6c6f85; --k-faint:#8c8fa1;
+    --k-bg0:#e2ddc8; --k-bg1:#ebe7d6; --k-bg2:#f4f1e3; --k-bg3:#d8d3bd; --k-bg4:#c8c3ac;
+    --k-ink:#27305c; --k-hi:#1c2350; --k-muted:#5b6188; --k-faint:#8186a6;
     --k-money:#40a02b; --k-qty:#df8e1d; --k-size:#04a5e5; --k-tier:#179299; --k-cat:#8839ef;
-    --k-act:#1e66f5; --k-bad:#d20f39; --k-warn:#fe640b; --k-on-act:#eff1f5;
-    --k-gold:#df8e1d; --gold:#df8e1d; --shot-a:#e6e9ef; --shot-b:#dce0e8;
+    --k-act:#2b3f94; --k-bad:#d20f39; --k-warn:#fe640b; --k-on-act:#f4f1e3;
+    --k-gold:#1f9a8f; --gold:#1f9a8f; --shot-a:#ebe7d6; --shot-b:#e2ddc8;
     --glass-edge:inset 0 1px 0 rgba(255,255,255,.8),inset 0 -1px 0 rgba(76,79,105,.07);
     --glass-lift:0 14px 36px -16px rgba(76,79,105,.28),0 2px 8px -3px rgba(76,79,105,.14);
     --k-lift:0 1px 0 rgba(255,255,255,.7) inset,0 8px 22px -14px rgba(76,79,105,.32);
@@ -2121,7 +2121,7 @@ en:{
   nothingYet:'Nothing planned yet.', showPast:'show past', loading:'Loading…', language:'Language',
   swapPanels:'Swap the month and this day', allDay:'All day', multiDay:'Days',
   signOut:'Sign out', signIn:'Sign in', createAccount:'Create account', usernameShown:'Your username is shown on the events you add.',
-  sharedTeam:'Yai Calendar, shared with your team.', username:'Username', password:'Password', teamCode:'Team code',
+  sharedTeam:'Odin’s Journal, shared with your team.', username:'Username', password:'Password', teamCode:'Team code',
   haveAccount:'I already have an account', newHere:'New here? Create an account', fillIn:'Fill in your username and password',
   tooMany:'Too many wrong tries — wait 15 minutes', wentWrong:'Something went wrong', cantReach:'Can’t reach the calendar — try again',
   signedInAs:'Signed in as {name}', signOutAsk:'Sign out on this device?',
@@ -2144,9 +2144,9 @@ en:{
   localAsk:v=>`This device has ${v.n} event${v.n>1?'s':''} saved only on it. Copy ${v.n>1?'them':'it'} to the shared calendar so everyone can see ${v.n>1?'them':'it'}?`,
   copied:v=>`Copied ${v.n} event${v.n===1?'':'s'}`, copyErr:'Could not copy: ',
   remTitle:'Get reminders', remText:'A week and a day before each event, at 7:00 in working hours.',
-  remIphone:'On iPhone: tap Share, then “Add to Home Screen”, and open Yai Calendar from there.',
+  remIphone:'On iPhone: tap Share, then “Add to Home Screen”, and open Odin’s Journal from there.',
   later:'Later', turnOn:'Turn on', remAria:'Reminders',
-  whereIos:'Settings → Notifications → Yai Calendar', whereAndroid:'Settings → Apps → Yai Calendar → Notifications',
+  whereIos:'Settings → Notifications → Odin’s Journal', whereAndroid:'Settings → Apps → Odin’s Journal → Notifications',
   remStayOff:v=>`Reminders stay off. To allow them: ${v.where}.`, remTurning:'Turning on reminders…',
   remOn:'Reminders on — a test one is on its way', remNoServer:'This server doesn’t send reminders',
   whyOffline:'No connection to the calendar. Check your internet and try again.', whySignIn:'Sign in first, then turn reminders on.',
@@ -2180,7 +2180,7 @@ zh:{
   nothingYet:'暂时没有安排。', showPast:'显示过去的', loading:'加载中…', language:'语言',
   swapPanels:'交换月历和当天面板', allDay:'全天', multiDay:'多天',
   signOut:'退出登录', signIn:'登录', createAccount:'创建账号', usernameShown:'你的用户名会显示在你添加的活动上。',
-  sharedTeam:'Yai Calendar，与你的团队共享。', username:'用户名', password:'密码', teamCode:'团队代码',
+  sharedTeam:'Odin’s Journal，与你的团队共享。', username:'用户名', password:'密码', teamCode:'团队代码',
   haveAccount:'我已有账号', newHere:'新用户？创建账号', fillIn:'请填写用户名和密码',
   tooMany:'错误次数过多，请等待 15 分钟', wentWrong:'出错了', cantReach:'无法连接日历，请重试',
   signedInAs:'已登录：{name}', signOutAsk:'在此设备上退出登录？',
@@ -2203,9 +2203,9 @@ zh:{
   localAsk:v=>`此设备上有 ${v.n} 个活动仅保存在本机。要复制到共享日历，让所有人都能看到吗？`,
   copied:v=>`已复制 ${v.n} 个活动`, copyErr:'无法复制：',
   remTitle:'开启提醒', remText:'每个活动前一周和前一天，在工作时间的 7:00 提醒你。',
-  remIphone:'在 iPhone 上：点按“分享”，选择“添加到主屏幕”，然后从主屏幕打开 Yai Calendar。',
+  remIphone:'在 iPhone 上：点按“分享”，选择“添加到主屏幕”，然后从主屏幕打开 Odin’s Journal。',
   later:'稍后', turnOn:'开启', remAria:'提醒',
-  whereIos:'设置 → 通知 → Yai Calendar', whereAndroid:'设置 → 应用 → Yai Calendar → 通知',
+  whereIos:'设置 → 通知 → Odin’s Journal', whereAndroid:'设置 → 应用 → Odin’s Journal → 通知',
   remStayOff:v=>`提醒保持关闭。如需开启：${v.where}。`, remTurning:'正在开启提醒…',
   remOn:'提醒已开启，测试通知马上就到', remNoServer:'此服务器不发送提醒',
   whyOffline:'无法连接日历。请检查网络后重试。', whySignIn:'请先登录，再开启提醒。',
@@ -2239,7 +2239,7 @@ km:{
   nothingYet:'មិនទាន់មានអ្វីគ្រោងទុកទេ។', showPast:'បង្ហាញអតីតកាល', loading:'កំពុងផ្ទុក…', language:'ភាសា',
   swapPanels:'ប្តូរទីតាំងប្រតិទិន និងថ្ងៃដែលបានជ្រើស', allDay:'ពេញមួយថ្ងៃ', multiDay:'ច្រើនថ្ងៃ',
   signOut:'ចាកចេញ', signIn:'ចូលគណនី', createAccount:'បង្កើតគណនី', usernameShown:'ឈ្មោះអ្នកប្រើរបស់អ្នកនឹងបង្ហាញលើព្រឹត្តិការណ៍ដែលអ្នកបន្ថែម។',
-  sharedTeam:'Yai Calendar ចែករំលែកជាមួយក្រុមរបស់អ្នក។', username:'ឈ្មោះអ្នកប្រើ', password:'ពាក្យសម្ងាត់', teamCode:'លេខកូដក្រុម',
+  sharedTeam:'Odin’s Journal ចែករំលែកជាមួយក្រុមរបស់អ្នក។', username:'ឈ្មោះអ្នកប្រើ', password:'ពាក្យសម្ងាត់', teamCode:'លេខកូដក្រុម',
   haveAccount:'ខ្ញុំមានគណនីរួចហើយ', newHere:'ថ្មីមែនទេ? បង្កើតគណនី', fillIn:'សូមបំពេញឈ្មោះអ្នកប្រើ និងពាក្យសម្ងាត់',
   tooMany:'ព្យាយាមខុសច្រើនពេក សូមរង់ចាំ 15 នាទី', wentWrong:'មានអ្វីមួយមិនប្រក្រតី', cantReach:'មិនអាចភ្ជាប់ទៅប្រតិទិនបានទេ សូមព្យាយាមម្តងទៀត',
   signedInAs:'បានចូលគណនីជា {name}', signOutAsk:'ចាកចេញពីឧបករណ៍នេះ?',
@@ -2262,9 +2262,9 @@ km:{
   localAsk:v=>`ឧបករណ៍នេះមានព្រឹត្តិការណ៍ ${v.n} ដែលរក្សាទុកតែក្នុងឧបករណ៍នេះប៉ុណ្ណោះ។ ចម្លងទៅប្រតិទិនរួម ដើម្បីឱ្យអ្នកផ្សេងអាចមើលឃើញឬទេ?`,
   copied:v=>`បានចម្លងព្រឹត្តិការណ៍ ${v.n}`, copyErr:'មិនអាចចម្លងបានទេ៖ ',
   remTitle:'ទទួលការរំលឹក', remText:'មួយសប្តាហ៍ និងមួយថ្ងៃមុនព្រឹត្តិការណ៍នីមួយៗ នៅម៉ោង 7:00 ក្នុងម៉ោងធ្វើការ។',
-  remIphone:'នៅលើ iPhone៖ ចុច «ចែករំលែក» បន្ទាប់មក «បន្ថែមទៅអេក្រង់ដើម» ហើយបើក Yai Calendar ពីទីនោះ។',
+  remIphone:'នៅលើ iPhone៖ ចុច «ចែករំលែក» បន្ទាប់មក «បន្ថែមទៅអេក្រង់ដើម» ហើយបើក Odin’s Journal ពីទីនោះ។',
   later:'ពេលក្រោយ', turnOn:'បើក', remAria:'ការរំលឹក',
-  whereIos:'ការកំណត់ → ការជូនដំណឹង → Yai Calendar', whereAndroid:'ការកំណត់ → កម្មវិធី → Yai Calendar → ការជូនដំណឹង',
+  whereIos:'ការកំណត់ → ការជូនដំណឹង → Odin’s Journal', whereAndroid:'ការកំណត់ → កម្មវិធី → Odin’s Journal → ការជូនដំណឹង',
   remStayOff:v=>`ការរំលឹកនៅតែបិទ។ ដើម្បីអនុញ្ញាត៖ ${v.where}។`, remTurning:'កំពុងបើកការរំលឹក…',
   remOn:'បានបើកការរំលឹក ការជូនដំណឹងសាកល្បងកំពុងមកដល់', remNoServer:'ម៉ាស៊ីនមេនេះមិនផ្ញើការរំលឹកទេ',
   whyOffline:'មិនអាចភ្ជាប់ទៅប្រតិទិនបានទេ។ សូមពិនិត្យអ៊ីនធឺណិត រួចព្យាយាមម្តងទៀត។', whySignIn:'សូមចូលគណនីជាមុន រួចបើកការរំលឹក។',
@@ -2717,7 +2717,7 @@ function askConfirm(msg, yes=tx('ok'), danger=false){
   });
 }
 
-// =================== Yai Calendar ===================
+// =================== Odin’s Journal ===================
 let JOURNAL_EVENTS = [];
 let JR_VIEW = localStorage.getItem('sk_journal_view') || 'calendar';
 let JR_CAL_YEAR, JR_CAL_MONTH; // 0-based month, like Date's own convention
@@ -3124,7 +3124,7 @@ document.addEventListener('pointerup',e=>{
 // animations), the calendar (week start, time format, where the day panel sits), reminders, getting the data out, and the version.
 // Choices are kept on the device (localStorage) except the account itself. Keys: sk_theme, yai_glass, yai_week, yai_time, yai_motion,
 // jr_dayfirst, yai_lang.
-const JR_THEMES=[['latte','Latte','#eff1f5','#1e66f5'],['daylight','Daylight','#ffffff','#2563eb'],['tokyo','Tokyo Night','#222436','#82aaff'],['gruvbox','Gruvbox','#282828','#fabd2f'],
+const JR_THEMES=[['latte','Odin Navy','#f4f1e3','#2b3f94'],['daylight','Daylight','#ffffff','#2563eb'],['tokyo','Tokyo Night','#222436','#82aaff'],['gruvbox','Gruvbox','#282828','#fabd2f'],
   ['nord','Nord','#2e3440','#88c0d0'],['rose-pine','Rosé Pine','#191724','#c4a7e7'],['odin-black','Black','#000000','#9ece6a'],['forest','Forest','#1b2b24','#8fbf7f']];
 const jrSetPref=(k,v)=>{ try{ localStorage.setItem(k,v); }catch(_){} };
 function jrApplyGlass(){ const g=jrPref('yai_glass','full'); document.documentElement.classList.toggle('gl-soft',g==='soft'); document.documentElement.classList.toggle('gl-solid',g==='solid'); }
@@ -3134,7 +3134,7 @@ function jrIcsText(t){ return String(t||'').replace(/\\/g,'\\\\').replace(/\r?\n
 function jrIcsFold(l){ let o=''; while(l.length>72){ o+=l.slice(0,72)+'\r\n '; l=l.slice(72); } return o+l; }
 // the calendar as an .ics file (opens in Apple/Google/Outlook calendars); times are the same wall-clock times, no zone
 function jrExportIcs(){
-  const now=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+Z$/,'Z'), L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Yai Calendar//EN','CALSCALE:GREGORIAN','X-WR-CALNAME:Yai Calendar'];
+  const now=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+Z$/,'Z'), L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Odin’s Journal//EN','CALSCALE:GREGORIAN','X-WR-CALNAME:Odin’s Journal'];
   for(const e of JOURNAL_EVENTS){
     L.push('BEGIN:VEVENT','UID:yai-'+e.id+'@yai-calendar','DTSTAMP:'+now);
     const end=jrEnd(e);
