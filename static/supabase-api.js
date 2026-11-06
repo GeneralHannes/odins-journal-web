@@ -63,6 +63,12 @@
     if (path === "/api/scan" && method === "POST")
       return functionCall(origin, "scan-event", { token, images: body.images, today: body.today, languages: body.languages });
     if (path === "/api/people") return rpc(origin, "yai_people", { p_token: token });
+    // money in / money out (ODJ): the month's rows and totals, add one, delete one
+    const mo = path.match(/^\/api\/money\/(\d{4}-\d{2})$/);
+    if (mo && method === "GET") return rpc(origin, "yai_money", { p_token: token, p_month: mo[1] });
+    if (path === "/api/money" && method === "POST") return rpc(origin, "yai_money_add", { p_token: token, p_entry: body });
+    const md = path.match(/^\/api\/money\/(\d+)$/);
+    if (md && method === "DELETE") return rpc(origin, "yai_money_delete", { p_token: token, p_id: +md[1] });
     if (path === "/api/journal/events" && method === "GET") return rpc(origin, "yai_events", { p_token: token });
     if (path === "/api/journal/events" && method === "POST") return rpc(origin, "yai_add", { p_token: token, p_event: body });
     if (path === "/api/journal/import" && method === "POST")
