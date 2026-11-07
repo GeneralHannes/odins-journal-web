@@ -1775,3 +1775,16 @@ background:radial-gradient(120% 90% at 35% 20%, color-mix(in srgb,var(--gold) 55
 box-shadow:inset 0 1px 0 rgb(255 255 255 / .75), inset 0 -2px 4px -1px color-mix(in srgb,var(--gold) 50%,#fff),
 0 0 0 3px color-mix(in srgb,var(--gold) 28%,transparent), 0 4px 10px -3px color-mix(in srgb,var(--gold) 90%,transparent); }
 html.gl-solid #jr-calendar #jr-cal-grid .jr-cal-day.today::after { display:none; }
+@property --ks { syntax:'<length>'; inherits:false; initial-value:0px; }
+.k-shine::before {
+background:radial-gradient(calc(var(--ks) * .55) circle at var(--mx,50%) var(--my,0%), rgb(255 255 255 / calc(.1 + var(--gl-a) * .24)), rgb(255 255 255 / 0) 70%),
+radial-gradient(var(--ks) circle at var(--mx,50%) var(--my,0%), rgb(255 255 255 / 0) 76%, rgb(255 255 255 / calc(.08 + var(--gl-a) * .2)) 88%,
+color-mix(in srgb,var(--k-act) calc(10% + var(--gl-a) * 8%),transparent) 93%, rgb(255 255 255 / 0) 100%);
+--ks:150px; }
+.k-shine.shining::before { animation:ksLens .55s var(--k-smooth) both; }
+@keyframes ksLens { from { --ks:18px; } }
+.jr-add.k-shine::before {
+background:radial-gradient(calc(var(--ks) * .5) circle at var(--mx,50%) var(--my,0%), rgb(255 255 255 / .45), rgb(255 255 255 / 0) 70%),
+radial-gradient(var(--ks) circle at var(--mx,50%) var(--my,0%), rgb(255 255 255 / 0) 74%, rgb(255 255 255 / .35) 88%, rgb(255 255 255 / 0) 100%);
+--ks:110px; }
+html.gl-solid .k-shine::before { background:radial-gradient(160px circle at var(--mx,50%) var(--my,0%), rgb(255 255 255 / .1), transparent 62%); }
