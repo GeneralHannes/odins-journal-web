@@ -335,7 +335,8 @@ mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='
 @keyframes kFadeOut  { to   { opacity:0; } }
 @keyframes kRise     { from { opacity:0; transform:translate3d(0,10px,0); } }
 @keyframes kReveal   { from { opacity:0; transform:translate3d(0,-6px,0); } }
-@keyframes kSheetIn  { from { opacity:0; transform:translate3d(0,14px,0) scale(.965); } }
+@keyframes kSheetIn  { from { transform:translate3d(0,10px,0) scale(.98); } }
+@keyframes kSheetFade { from { opacity:0; } }
 @keyframes kSheetOut { to   { opacity:0; transform:translate3d(0,8px,0) scale(.975); } }
 @keyframes kToastIn  { from { opacity:0; transform:translate3d(-50%,18px,0) scale(.94); } }
 .k-press, button.act, button.mini, a.mini, .chip, .keep-switch a, .add-seg button, .add-kind-btn,
@@ -367,10 +368,10 @@ will-change:transform,width; }
 .k-thumb { transition:none; }
 ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation:none !important; }
 }
-.modal-ov { animation:kFadeIn .28s ease-out both; }
-.modal-card { animation:kSheetIn var(--k-t) var(--k-smooth) both; will-change:transform,opacity; }
-.modal-ov.k-leaving { animation:kFadeOut .22s var(--k-exit) forwards; }
-.modal-ov.k-leaving .modal-card { animation:kSheetOut .22s var(--k-exit) forwards; }
+.modal-ov { animation:kFadeIn .16s ease-out backwards; }
+.modal-card { animation:kSheetFade .14s ease-out backwards, kSheetIn .26s var(--k-snappy) backwards; touch-action:manipulation; }
+.modal-ov.k-leaving { animation:kFadeOut .18s var(--k-exit) forwards; }
+.modal-ov.k-leaving .modal-card { animation:kSheetOut .16s var(--k-exit) forwards; }
 #jr-agenda, #jr-calendar { animation:kRise var(--k-t) var(--k-smooth) both; will-change:transform,opacity; }
 @keyframes kRiseR { from { opacity:0; transform:translateY(14px); } }
 @keyframes kRiseC { from { opacity:0; transform:translateX(-50%) translateY(14px); } }
@@ -829,11 +830,6 @@ background-size:250% 100%; animation:jrSweep .75s var(--k-smooth) both; }
 .jr-add:active svg { transform:rotate(180deg) scale(.85); transition-duration:.2s; }
 .jr-add { transition:transform var(--k-t-quick) var(--k-bouncy), box-shadow .3s ease; }
 .jr-add:active { transform:scale(.94); }
-.modal-card .field { animation:kRise .4s var(--k-smooth) both; }
-.modal-card .field:nth-of-type(1) { animation-delay:40ms; } .modal-card .field:nth-of-type(2) { animation-delay:80ms; }
-.modal-card .field:nth-of-type(3) { animation-delay:120ms; } .modal-card .field:nth-of-type(4) { animation-delay:160ms; }
-.modal-card .field:nth-of-type(n+5) { animation-delay:200ms; }
-.modal-card .item-edit-actions { animation:kRise .4s var(--k-smooth) .24s both; }
 @keyframes jrAway { 0%,100% { box-shadow:var(--glass-edge),0 0 0 0 rgba(212,175,55,0); color:var(--ink); }
 50% { box-shadow:var(--glass-edge),0 0 0 3px rgba(212,175,55,.22),0 0 16px 2px rgba(212,175,55,.3); color:var(--gold); } }
 .jr-mn-today.away { animation:jrAway 2.4s ease-in-out 3; }
@@ -1576,12 +1572,11 @@ body::after { animation:glDrift 52s ease-in-out infinite alternate; }
 @media (pointer:coarse) { body::after { animation:none; } }
 @keyframes glDrift { 0% { transform:translate3d(0,0,0) rotate(0deg) scale(1); } 50% { transform:translate3d(3%,-2%,0) rotate(6deg) scale(1.07); } 100% { transform:translate3d(-3%,3%,0) rotate(-5deg) scale(1.03); } }
 .jr-mn-btn:active, .jr-vt-btn:active, .jr-scan:active, .jr-mn-today:active, .jr-pp-btn:active, .jr-chipbtn:active { transform:scale(.9); transition:transform var(--k-t-press) ease-out; }
-.modal-ov { -webkit-backdrop-filter:blur(7px) saturate(115%); backdrop-filter:blur(7px) saturate(115%); animation:glOv .35s ease-out both; }
-@keyframes glOv { from { opacity:0; -webkit-backdrop-filter:blur(0); backdrop-filter:blur(0); } }
+.modal-ov { -webkit-backdrop-filter:blur(7px) saturate(115%); backdrop-filter:blur(7px) saturate(115%); animation:kFadeIn .16s ease-out backwards; }
 }
 @media (prefers-reduced-motion:no-preference) and (min-width:761px) {
-.modal-card { animation:glCard .6s var(--k-bouncy) both; }
-@keyframes glCard { from { opacity:0; transform:translateY(22px) scale(.94); } 45% { opacity:1; } }
+.modal-card { animation:kSheetFade .14s ease-out backwards, glCard .3s var(--k-bouncy) backwards; }
+@keyframes glCard { from { transform:translateY(12px) scale(.97); } }
 }
 @media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
 .jr-cal-day { transition:background-color .2s, box-shadow .25s; }
