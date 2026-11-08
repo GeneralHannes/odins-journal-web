@@ -30,7 +30,7 @@ try{var t=localStorage.getItem("sk_theme");document.documentElement.setAttribute
   Vault's admin/inventory workflow, so it can be opened, bookmarked and used
   on its own without any of Vault's tab-switching machinery. Reads/writes
   only /api/journal/*, and shares nothing with Vault except the PIN
-  (localStorage `sk_token`) and the same visual language.
+  (localStorage `sk_token`; the journal keeps its own session in `jr_token`) and the same visual language.
 -->
 <link rel="preload" href="static/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="static/app.50aa8170ac.css">
@@ -100,7 +100,7 @@ if(/[?&]embed=1\b/.test(location.search) && window.top!==window) document.docume
 
 <div id="toast" role="status" aria-live="polite"></div>
 
-<script src="static/app.4347f0ed36.js"></script>
+<script src="static/app.5dabe71911.js"></script>
 <script>/* offline app shell (static/sw.js) and staying current. The installed app (home screen, Android wrapper) is often brought back to the
    front rather than opened anew, so: look for a new version on every open and every return to the front; and when one is ready,
    apply it WITHOUT being asked at a moment where nothing can be lost — just opened or returned and not touched yet, or while the app
