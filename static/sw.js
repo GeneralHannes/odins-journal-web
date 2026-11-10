@@ -3,7 +3,7 @@
 // "New version — tap to reload". Fonts and the page's styles/script (static/app.<hash>.css|js: a new version is a new name)
 // never change under their URL, so they're kept. /api/* is never cached.
 
-const SHELL = "yai-shell-v215";            // bump to make every device drop its copy
+const SHELL = "yai-shell-v216";            // bump to make every device drop its copy
 // Paths are taken from the worker's own scope, so it works at "/" and under a sub-path (GitHub Pages).
 const BASE = new URL(self.registration.scope).pathname;
 const PAGES = [BASE, BASE + "journal"];
@@ -33,7 +33,18 @@ self.addEventListener("fetch", (e) => {
   if (url.pathname.startsWith("/api/") || url.pathname === BASE + "sw.js") return;
   if (req.mode === "navigate" && PAGES.includes(url.pathname)) return e.respondWith(page(e, url.pathname));
   if (url.pathname.startsWith(BASE + "static/fonts/") || url.pathname.startsWith(BASE + "static/app.")) return e.respondWith(kept(req));
+  // the rest of static/ (icons, the logo): from the device at once, brought up to date behind it. Not config.json: where the
+  // data lives is always asked of the host (the page keeps its own copy of the answer).
+  if (url.pathname.startsWith(BASE + "static/") && !url.pathname.endsWith("/config.json")) return e.respondWith(renewed(e, req));
 });
+
+async function renewed(e, req) {
+  const c = await caches.open(SHELL);
+  const hit = await c.match(req);
+  const net = fetch(req).then(async (r) => { if (r.ok) await c.put(req, r.clone()); return r; });
+  if (hit) { e.waitUntil(net.catch(() => {})); return hit; }
+  return net;
+}
 
 async function page(e, path) {
   const c = await caches.open(SHELL);

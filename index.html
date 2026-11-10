@@ -8,15 +8,14 @@
 <script>if(navigator.standalone)document.documentElement.classList.add("ios-app");
 /* iPhone only (not iPad or Android): its own safe-area layout, see "iPhone" in the styles */
 if(/iPhone|iPod/.test(navigator.userAgent))document.documentElement.classList.add("ios-phone");
+/* iPad (iPadOS 13+ says "Macintosh", so a touch screen gives it away): the top glass fades out, see "iPad" in the styles */
+if(/iPad/.test(navigator.userAgent)||(/Macintosh/.test(navigator.userAgent)&&navigator.maxTouchPoints>1))document.documentElement.classList.add("ios-pad");
 /* Android: its Chrome misdraws live background blur (stale strips over the month header), so the glass there
    is drawn without it — see "Android" in the styles */
 if(/Android/.test(navigator.userAgent)){document.documentElement.classList.add("android");if(+((navigator.userAgent.match(/Chrome\/(\d+)/)||[])[1]||0)>=115)document.documentElement.classList.add("android-blur")}</script>
 <script>/* light (Catppuccin Latte) unless this device chose another theme (Daylight is also defined: data-theme="daylight") */
 try{var t=localStorage.getItem("sk_theme");document.documentElement.setAttribute("data-theme",t||"latte");var g=localStorage.getItem("yai_glass");if(g==="soft"||g==="solid")document.documentElement.classList.add("gl-"+g)}catch(e){document.documentElement.setAttribute("data-theme","latte")}</script>
 <meta name="theme-color" content="#ebe7d6">
-<script>window.JOURNAL_STATIC=true</script>
-<script src="static/local-api.js"></script>
-<script src="static/supabase-api.js"></script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="static/favicon-32.png?v=3" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="static/apple-touch-icon.png?v=3">
@@ -33,7 +32,7 @@ try{var t=localStorage.getItem("sk_theme");document.documentElement.setAttribute
   (localStorage `sk_token`; the journal keeps its own session in `jr_token`) and the same visual language.
 -->
 <link rel="preload" href="static/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="static/app.50aa8170ac.css">
+<link rel="stylesheet" href="static/app.97e9062f6a.css">
 <script>
 /* Embed mode (src/modules/apps): opened as ?embed=1 inside another app's frame
    (Odin's Vault's tab, or any future host), this page drops its own app
@@ -50,13 +49,14 @@ if(/[?&]embed=1\b/.test(location.search) && window.top!==window) document.docume
     <div class="jr-viewtoggle k-shine" id="jr-viewtoggle">
       <button class="jr-vt-btn" id="jr-view-calendar-btn" onclick="setJournalView('calendar')" title="Calendar" data-i18n-title="calendar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg><span data-i18n="calendar">Calendar</span></button>
       <button class="jr-vt-btn" id="jr-view-agenda-btn" onclick="setJournalView('agenda')" title="Agenda" data-i18n-title="agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r=".9" fill="currentColor"/><circle cx="4" cy="12" r=".9" fill="currentColor"/><circle cx="4" cy="18" r=".9" fill="currentColor"/></svg><span data-i18n="agenda">Agenda</span></button>
+      <button class="jr-vt-btn" id="jr-view-money-btn" onclick="setJournalView('money')" title="Money" data-i18n-title="money" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10h18"/><path d="M16 14.5h2"/><path d="M6 6l9.5-2.6a1.5 1.5 0 0 1 1.8 1L18 6"/></svg><span data-i18n="money">Money</span></button>
       <button class="jr-vt-btn" id="jr-view-people-btn" onclick="setJournalView('people')" title="People" data-i18n-title="peopleTab" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.2a3.2 3.2 0 0 1 0 5.6M18 14.4c1.8.8 3 2.6 3 5.6"/></svg><span data-i18n="peopleTab">People</span></button>
     </div>
     <!-- desktop: what's coming up, in date order (hidden on phones) -->
     <section class="jr-upnext" id="jr-upnext" aria-label="Upcoming events" data-i18n-aria="upcomingAria"></section>
     <div data-lang-slot="rail"></div>
     <button type="button" class="jr-scan k-shine" onclick="jrScan()" title="Add from a photo" data-i18n-title="scanBtn" aria-label="Add from a photo" data-i18n-aria="scanBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7H8l1.2-2h5.6L16 7h2.5A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="13" r="3.4"/><path d="m19.2 3.2.45 1.35L21 5l-1.35.45L19.2 6.8l-.45-1.35L17.4 5l1.35-.45z"/></svg><span data-i18n="scanBtn">Add from a photo</span></button>
-    <button class="act jr-add k-shine" onclick="openAddEvent(JR_VIEW==='calendar'?JR_SEL:undefined)" title="Add event" data-i18n-title="addEvent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span data-i18n="addEvent">Add event</span></button>
+    <button class="act jr-add k-shine" onclick="jrAddBtn()" title="Add event" data-i18n-title="addEvent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span data-i18n="addEvent">Add event</span></button>
   </nav>
 
   <main>
@@ -65,6 +65,9 @@ if(/[?&]embed=1\b/.test(location.search) && window.top!==window) document.docume
         <label class="muted jr-showpast"><input type="checkbox" id="jr-show-past" onchange="renderAgenda()"> <span data-i18n="showPast">show past</span></label></div>
       <div id="jr-agenda-list"><span class="empty" data-i18n="loading">Loading&hellip;</span></div>
     </div>
+
+    <!-- the money book: one timeline, the newest at the bottom; the totals follow the month on screen -->
+    <div id="jr-moneyview" style="display:none"></div>
 
     <div id="jr-people" style="display:none">
       <div class="row jr-agenda-head"><h2 class="view-title" data-i18n="peopleTab">People</h2><button type="button" class="act jr-pp-add" id="jr-pp-add" onclick="jrPersonForm()" hidden>＋ <span data-i18n="addPerson">Add person</span></button><button type="button" class="jr-gear" onclick="jrSettings()" title="Settings" aria-label="Settings" data-i18n-title="settings" data-i18n-aria="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 14.5a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button></div>
@@ -80,6 +83,7 @@ if(/[?&]embed=1\b/.test(location.search) && window.top!==window) document.docume
         <div class="jr-cal-head">
           <h2 class="jr-month"><span id="jr-cal-month"></span> <span class="jr-year" id="jr-cal-year"></span></h2>
           <button type="button" class="jr-money-btn jr-money-month" id="jr-money-mbtn" onclick="jrMoney()" hidden></button>
+          <button type="button" class="jr-viewing" id="jr-viewing-top" onclick="jrPickOwner(0)" hidden></button>
           <button type="button" class="jr-gear" onclick="jrSettings()" title="Settings" aria-label="Settings" data-i18n-title="settings" data-i18n-aria="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 14.5a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
         </div>
         <div class="jr-cal-dow" id="jr-cal-dow"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
@@ -100,7 +104,7 @@ if(/[?&]embed=1\b/.test(location.search) && window.top!==window) document.docume
 
 <div id="toast" role="status" aria-live="polite"></div>
 
-<script src="static/app.5dabe71911.js"></script>
+<script src="static/app.083c61394d.js"></script>
 <script>/* offline app shell (static/sw.js) and staying current. The installed app (home screen, Android wrapper) is often brought back to the
    front rather than opened anew, so: look for a new version on every open and every return to the front; and when one is ready,
    apply it WITHOUT being asked at a moment where nothing can be lost — just opened or returned and not touched yet, or while the app
