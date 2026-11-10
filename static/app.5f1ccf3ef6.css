@@ -1420,6 +1420,11 @@ padding:.55rem; border-radius:16px; border:1px solid var(--glass-line); backgrou
 .jr-money-page #mn-list { grid-column:2; grid-row:1 / -1; min-height:0; padding:0 .8rem; }
 }
 @media (max-width:760px) and (orientation:portrait) { #jr-moneyview { padding-bottom:.4rem; } }
+.jr-mn-nav { width:2.75rem; height:2.75rem; }
+.jr-mn-del, .jr-mn-cur .jr-chipbtn { position:relative; }
+.jr-mn-del::before { content:""; position:absolute; inset:-.45rem -.35rem; }
+.jr-mn-cur .jr-chipbtn::before { content:""; position:absolute; inset:-.5rem -.2rem; }
+.jr-mn-cur .jr-chipbtn { min-width:2.3rem; }
 .jr-tdots { flex:none; display:inline-flex; align-items:center; gap:2px; margin:0 auto 0 2px; line-height:1; }
 .jr-tdots i { width:.42rem; height:.42rem; border-radius:50%; border:1.5px solid var(--accent); box-sizing:border-box; }
 .jr-tdots i.on { background:var(--accent); }
