@@ -659,9 +659,9 @@ white-space:normal; overflow-wrap:break-word; }
 .jr-ae { container-type:inline-size; }
 @container (max-width:34rem) { .jr-ae-row3 { grid-template-columns:minmax(0,1fr) minmax(0,1fr); } .jr-ae-row3 .jr-ae-loc { grid-column:1 / -1; } }
 .jr-ae-row .field input { min-width:0; width:100%; }
-.jr-ae input[type=date], .jr-ae input[type=time] { -webkit-appearance:none; appearance:none; display:block; box-sizing:border-box;
+:is(.jr-ae, .jr-money) input[type=date], :is(.jr-ae, .jr-money) input[type=time] { -webkit-appearance:none; appearance:none; display:block; box-sizing:border-box;
 width:100%; min-width:0; max-width:100%; min-height:2.75rem; text-align:left; }
-.jr-ae input[type=date]::-webkit-date-and-time-value, .jr-ae input[type=time]::-webkit-date-and-time-value { text-align:left; min-height:1.3em; }
+:is(.jr-ae, .jr-money) input[type=date]::-webkit-date-and-time-value, :is(.jr-ae, .jr-money) input[type=time]::-webkit-date-and-time-value { text-align:left; min-height:1.3em; }
 .jr-ae-tabs { display:flex; gap:.3rem; overflow-x:auto; margin:-.1rem 0 .7rem; padding:.1rem 0 .25rem; scrollbar-width:none; touch-action:pan-x; }
 .jr-ae-tabs[hidden], #ae-daybox[hidden], #ae-all[hidden] { display:none; }
 .jr-ae-tab { flex:none; position:relative; border:1px solid var(--glass-line); border-radius:999px; padding:.32rem .72rem; cursor:pointer;
@@ -1403,10 +1403,12 @@ color:color-mix(in srgb,var(--accent) 55%,var(--muted)); }
 padding:.55rem; border-radius:16px; border:1px solid var(--glass-line); background:color-mix(in srgb,var(--k-bg2) 80%,transparent); }
 .jr-money-page .jr-mn-fields { display:contents; }
 .jr-money-page #mn-kind { grid-area:kind; align-self:center; }
-.jr-money-page .jr-mn-amt { grid-area:amt; } .jr-money-page .jr-mn-date { grid-area:date; } .jr-money-page .jr-mn-note { grid-area:note; }
+.jr-money-page .jr-mn-amt { grid-area:amt; } .jr-money-page .jr-mn-date { grid-area:date; min-width:0; } .jr-money-page .jr-mn-note { grid-area:note; }
 .jr-money-page .jr-mn-form .act { grid-area:add; align-self:stretch; padding-left:1.1rem; padding-right:1.1rem; }
 .jr-money-page .jr-mn-form label > span { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
 .jr-money-page .jr-mn-form input { min-height:2.6rem; }
+.jr-money-page .jr-mn-form input[type=date] { min-height:2.6rem; text-align:center; }
+.jr-money-page .jr-mn-form input[type=date]::-webkit-date-and-time-value { text-align:center; }
 @media (max-width:380px) { .jr-money-page .jr-mn-form { grid-template-columns:auto minmax(0,1fr); grid-template-areas:"kind amt" "date date" "note add"; } }
 @media (min-width:1024px) and (min-height:521px) {
 #jr-moneyview { max-width:1100px; }
@@ -1471,6 +1473,12 @@ background:color-mix(in srgb,var(--ink) 5%,transparent); transition:background-c
 .jr-tk-meta { margin:-.2rem 0 .6rem; color:var(--muted); font-size:.78rem; }
 .jr-ae-totask { display:inline-flex; align-items:center; gap:.35rem; flex:none; }
 :root:not([data-theme="latte"]):not([data-theme="daylight"]) :is(.jr-tk, .jr-tk-row, .jr-tdots) { --accent:var(--k-act) !important; }
+.modal-card :is(input, textarea, select) { scroll-margin:.75rem 0 1rem; }
+.modal-card.jr-ae :is(input, textarea, select) { scroll-margin-bottom:6.2rem; }
+html.kb .modal-card.jr-ae :is(input, textarea, select) { scroll-margin-bottom:4.4rem; }
+.modal-card.jr-ae .item-edit-actions { margin-top:1rem; }
+html.kb .modal-card.jr-ae .item-edit-actions { padding-top:.45rem; padding-bottom:.5rem; }
+html.kb .modal-card.jr-ae .item-edit-actions button { min-height:2.5rem; padding-top:.4rem; padding-bottom:.4rem; }
 .jr-ae-head { position:relative; }
 .jr-ae-colwrap { position:relative; flex:none; }
 .jr-ae-colbtn { all:unset; box-sizing:border-box; cursor:pointer; display:inline-flex; align-items:center; gap:.25rem; height:2.2rem; padding:0 .55rem 0 .4rem; border-radius:999px;
