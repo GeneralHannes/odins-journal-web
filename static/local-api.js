@@ -5,6 +5,20 @@
   const real = window.fetch.bind(window);
   const KEY = "journal_local_events";
   const DATE_RE = /^\d{4}-\d{2}-\d{2}$/, TIME_RE = /^\d{2}:\d{2}(:\d{2})?$/;
+  // repeating events (the same rules as odj.clean_repeat): every day / week (on weekdays) / month (on a day), until a day
+  const setRepeat = (ev, body) => {
+    const k = str(body.repeat_every);
+    for (const f of ["repeat_every", "repeat_weekdays", "repeat_month_day", "repeat_until", "money_in", "money_out"]) ev[f] = null;
+    if (!k) return null;
+    if (!["day", "week", "month"].includes(k)) return "repeat must be day, week or month";
+    if (ev.end_date) return "a repeating event is one day long";
+    ev.repeat_every = k; ev.done_days = ev.done_days || [];
+    if (k === "week") { const w = [...new Set((Array.isArray(body.repeat_weekdays) ? body.repeat_weekdays : []).map(Number).filter((d) => d >= 0 && d <= 6))].sort();
+      ev.repeat_weekdays = w.length ? w : [new Date(ev.event_date + "T00:00:00").getDay()]; }
+    if (k === "month") { const d = +body.repeat_month_day; ev.repeat_month_day = d >= 1 && d <= 31 ? d : +ev.event_date.slice(8, 10); }
+    const u = str(body.repeat_until); if (u && DATE_RE.test(u)) { if (u < ev.event_date) return "the last day is before the first"; ev.repeat_until = u; }
+    return null;
+  };
   // the static build sets JOURNAL_STATIC: there's no server to ask about, so don't wait on a request to find out
   let mode = window.JOURNAL_STATIC ? Promise.resolve("local") : null;
 
@@ -17,7 +31,7 @@
   const fail = (status, detail) => reply({ detail }, status);
   const secs = (t) => (t ? (t.length === 5 ? t + ":00" : t) : null);
   const now = () => new Date().toISOString();
-  const COLOR = (c) => (["blue", "green", "yellow", "orange", "red", "purple", "teal", "sky"].includes(str(c).toLowerCase()) ? str(c).toLowerCase() : null);
+  const COLOR = (c) => (["blue", "green", "yellow", "orange", "red", "purple", "teal", "sky", "pink", "rose", "lime", "mint", "cyan", "indigo", "lavender", "brown", "gold", "grey"].includes(str(c).toLowerCase()) ? str(c).toLowerCase() : null);
   const str = (v) => (v ?? "").toString().trim();
   const order = (a, b) =>
     a.event_date.localeCompare(b.event_date) ||
@@ -37,7 +51,7 @@
       const ev = { id: db.next++, event_date, event_time: secs(event_time), end_date: null, end_time: null, day_info: null, color: COLOR(body.color),
         location: str(body.location) || null, title, notes: str(body.notes) || null,
         category: str(body.category) || null, status: ["tentative", "cancelled"].includes(body.status) ? body.status : null, done: false, created_at: now(), updated_at: now() };
-      const why = setSpan(ev, body); if (why) return fail(400, why);
+      const why = setSpan(ev, body) || setRepeat(ev, body); if (why) return fail(400, why);
       db.events.push(ev); save(db); return reply(ev, 201);
     }
     const m = path.match(/^\/api\/journal\/events\/(\d+)(\/done)?$/);
@@ -45,7 +59,14 @@
     const id = +m[1], ev = db.events.find((e) => e.id === id);
     if (!ev) return fail(404, "no event #" + id);
     if (method === "DELETE") { db.events = db.events.filter((e) => e.id !== id); save(db); return reply({ deleted: id }); }
-    if (m[2]) { ev.done = !!body.done; ev.updated_at = now(); save(db); return reply(ev); }
+    if (m[2]) {
+      if (ev.repeat_every) {   // a repeating event: ticked for one of its days (no money book on this device)
+        const d = DATE_RE.test(str(body.day)) ? str(body.day) : ev.event_date, l = (ev.done_days || []).filter((x) => x !== d);
+        ev.done_days = body.done ? [...l, d].sort() : l;
+      } else ev.done = !!body.done;
+      ev.updated_at = now(); save(db); return reply(ev);
+    }
+    if ("repeat_every" in body) { const why = setRepeat(ev, body); if (why) return fail(400, why); }
     if ("title" in body) { const t = str(body.title); if (!t) return fail(400, "title cannot be blank"); ev.title = t; }
     if ("event_date" in body) { const d = str(body.event_date); if (!DATE_RE.test(d)) return fail(400, "event_date must be YYYY-MM-DD"); ev.event_date = d; }
     if ("event_time" in body) { const t = str(body.event_time); if (t && !TIME_RE.test(t)) return fail(400, "event_time must be HH:MM"); ev.event_time = secs(t) || null; }

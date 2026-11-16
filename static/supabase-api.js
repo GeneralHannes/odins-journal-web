@@ -79,19 +79,12 @@
     if (path === "/api/money" && method === "POST") return rpc(origin, "yai_money_add", { p_token: token, p_entry: { ...body, ...ownerIn() } });
     const md = path.match(/^\/api\/money\/(\d+)$/);
     if (md && method === "DELETE") return rpc(origin, "yai_money_delete", { p_token: token, p_id: +md[1] });
-    // repeating tasks (ODJ): every day / week / month, ticked off per day
-    const tk = path.match(/^\/api\/journal\/tasks\/(\d+)(\/done)?$/);
-    if (path === "/api/journal/tasks" && method === "GET") return rpc(origin, "yai_tasks", { p_token: token, ...owner() });
-    if (path === "/api/journal/tasks" && method === "POST") return rpc(origin, "yai_task_add", { p_token: token, p_task: { ...body, ...ownerIn() } });
-    if (tk && tk[2] && method === "POST") return rpc(origin, "yai_task_done", { p_token: token, p_id: +tk[1], p_day: body.day ?? "", p_done: !!body.done });
-    if (tk && method === "POST") return rpc(origin, "yai_task_update", { p_token: token, p_id: +tk[1], p_task: body });
-    if (tk && method === "DELETE") return rpc(origin, "yai_task_delete", { p_token: token, p_id: +tk[1] });
     if (path === "/api/journal/events" && method === "GET") return rpc(origin, "yai_events", { p_token: token, ...owner() });
     if (path === "/api/journal/events" && method === "POST") return rpc(origin, "yai_add", { p_token: token, p_event: { ...body, ...ownerIn() } });
     if (path === "/api/journal/import" && method === "POST")
       return rpc(origin, "yai_import", { p_token: token, p_events: Array.isArray(body) ? body : body.events });
     if (ev && method === "DELETE") return rpc(origin, "yai_delete", { p_token: token, p_id: +ev[1] });
-    if (ev && ev[2]) return rpc(origin, "yai_done", { p_token: token, p_id: +ev[1], p_done: !!body.done });
+    if (ev && ev[2]) return rpc(origin, "yai_done", { p_token: token, p_id: +ev[1], p_done: !!body.done, ...(body.day ? { p_day: body.day } : {}) });
     if (ev && method === "POST") return rpc(origin, "yai_update", { p_token: token, p_id: +ev[1], p_patch: body });
     // reminders: the "reminders" Edge Function (supabase/functions/reminders)
     if (path === "/api/push/key") return reminders(origin, { action: "key" });
